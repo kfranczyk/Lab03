@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -45,12 +46,18 @@ public class TrzeciaAktywnosc extends AppCompatActivity {
 
     //próbowałem coś z kamerą ale to nie działa
     public void showCamera(View view){
-        Intent intencja = new Intent("android.media.action.IMAGE_CAPTURE");
-        try {
-            startActivityForResult(intencja, CAMERA_PIC_REQUEST);
-        }catch (ActivityNotFoundException e) {
-            Toast.makeText(this,"Brak możliwości zrobienia zdjecia",Toast.LENGTH_LONG).show();
+        PackageManager pm = getPackageManager();
+        if(pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { //sprawdzenie czy istnieje jakas kamera na urządzeniu
+
+            Intent intencja = new Intent("android.media.action.IMAGE_CAPTURE");
+            try {
+                startActivityForResult(intencja, CAMERA_PIC_REQUEST);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "Brak możliwości zrobienia zdjecia", Toast.LENGTH_LONG).show();
+            }
         }
+        else
+            Toast.makeText(this, "Brak kamery??", Toast.LENGTH_LONG).show();
     }
 
 
